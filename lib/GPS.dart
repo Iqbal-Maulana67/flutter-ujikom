@@ -110,6 +110,7 @@ class _GPSState extends State<GPSPage> {
     });
   }
 
+  TextEditingController mapLocation = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,6 +175,7 @@ class _GPSState extends State<GPSPage> {
             ),
             TextFormField(
               autofocus: false,
+              controller: mapLocation,
               obscureText: false,
               decoration: InputDecoration(
                   hintText: 'Lokasi tujuan anda',
@@ -195,7 +197,7 @@ class _GPSState extends State<GPSPage> {
                     final intent = AndroidIntent(
                         action: 'action_view',
                         data: Uri.encodeFull(
-                            'google.navigation:q=Jakarta+Indonesia&avoid=tf'),
+                            'google.navigation:q=${mapLocation.text}&avoid=tf'),
                         package: 'com.google.android.apps.maps');
                     intent.launch();
                   },
@@ -209,11 +211,6 @@ class _GPSState extends State<GPSPage> {
             )
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }

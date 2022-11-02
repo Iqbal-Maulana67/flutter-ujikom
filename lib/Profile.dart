@@ -209,6 +209,7 @@ class _ProfileState extends State<Profile> {
           itemCount: _dataUser.length,
           itemBuilder: (context, index) => Card(
             color: Colors.amber[200],
+            margin: EdgeInsets.all(15),
             child: Row(
               children: [
                 Expanded(

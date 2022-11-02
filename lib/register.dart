@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_praktek_ujikom/Profile.dart';
-import 'package:flutter_praktek_ujikom/login.dart';
 import 'package:flutter_praktek_ujikom/main.dart';
 import 'package:flutter_praktek_ujikom/model/myEncrypter.dart';
 import 'package:flutter_praktek_ujikom/model/sql_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
+  @override
+  State<Register> createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController namaController = TextEditingController();
@@ -23,6 +27,12 @@ class Register extends StatelessWidget {
     var plainText = MyEncryptionDecryption.encryptAES(passwordController.text);
     await SQLHelper.createItem(usernameController.text, plainText.base64,
         namaController.text, nomorController.text);
+  }
+
+  bool _passwordVisibleFilter = false;
+  @override
+  void initState() {
+    _passwordVisibleFilter = false;
   }
 
   @override
@@ -59,9 +69,10 @@ class Register extends StatelessWidget {
               child: TextFormField(
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
-                    hintText: "Input nama",
-                    hintStyle: TextStyle(color: Colors.white),
-                    fillColor: Colors.white),
+                  hintText: "Input nama",
+                  hintStyle: TextStyle(color: Colors.white),
+                  fillColor: Colors.white,
+                ),
                 controller: namaController,
               ),
             ),
@@ -80,11 +91,24 @@ class Register extends StatelessWidget {
               margin: EdgeInsets.only(left: 50.0, right: 50.0, bottom: 20.0),
               child: TextFormField(
                 style: TextStyle(color: Colors.white),
-                obscureText: true,
+                obscureText: _passwordVisibleFilter,
                 decoration: InputDecoration(
                   hintText: "Input Password",
                   hintStyle: TextStyle(color: Colors.white),
                   fillColor: Colors.white,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _passwordVisibleFilter
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _passwordVisibleFilter = !_passwordVisibleFilter;
+                      });
+                    },
+                  ),
                 ),
                 controller: passwordController,
               ),
@@ -100,7 +124,7 @@ class Register extends StatelessWidget {
                     // setSharedPreferences();
                     addItem();
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('!'),
+                      content: Text('Berhasil melakukan registrasi!'),
                     ));
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => LoginPage()));

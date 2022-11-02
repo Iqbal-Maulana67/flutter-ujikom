@@ -6,7 +6,6 @@ import 'package:flutter_praktek_ujikom/register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Profile.dart';
 import 'GPS.dart';
-import 'login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,8 +72,8 @@ class _LoginPage extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
+      body: ListView(children: [
+        Column(
           children: <Widget>[
             Container(
               margin: EdgeInsets.only(top: 100.0, bottom: 100.0),
@@ -120,7 +119,6 @@ class _LoginPage extends State<LoginPage> {
                   height: 50.0,
                   color: Colors.pinkAccent[400],
                   onPressed: () {
-                    // Text('Username ${_dataUser[0]['username']}');
                     int lenght = _dataUser.length;
                     var i = 0;
                     print(lenght);
@@ -141,8 +139,13 @@ class _LoginPage extends State<LoginPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Dashboard()));
+                        break;
+                      } else if (i == lenght - 1) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text('User tidak ada/ditemukan!'),
+                        ));
                       }
-                      if (i == lenght) {}
                     }
                   },
                   child: Text("LOGIN")),
@@ -175,7 +178,7 @@ class _LoginPage extends State<LoginPage> {
             )
           ],
         ),
-      ),
+      ]),
       backgroundColor: Colors.pink[600],
     );
   }

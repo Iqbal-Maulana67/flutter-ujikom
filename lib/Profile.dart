@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_praktek_ujikom/main.dart';
+import 'package:flutter_praktek_ujikom/model/myEncrypter.dart';
 import 'package:flutter_praktek_ujikom/model/sql_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -57,12 +58,10 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<void> _updateItem(int id) async {
-    await SQLHelper.updateItem(
-        id,
-        _usernameController.text,
-        _passwordController.text,
-        _namaController.text,
-        _no_telpController.text);
+    var encryptedText =
+        MyEncryptionDecryption.encryptAES(_passwordController.text);
+    await SQLHelper.updateItem(id, _usernameController.text,
+        encryptedText.base64, _namaController.text, _no_telpController.text);
     readDatabase();
   }
 
@@ -105,7 +104,8 @@ class _ProfileState extends State<Profile> {
           _dataUser.firstWhere((element) => element['id'] == id);
       _usernameController.text = existingJournal['username'];
       _namaController.text = existingJournal['nama'];
-      _passwordController.text = existingJournal['password'];
+      // _passwordController.text =
+      //     MyEncryptionDecryption.decryptAES(existingJournal['password']);
       _no_telpController.text = existingJournal['no_telp'];
     }
 

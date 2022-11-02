@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_praktek_ujikom/Profile.dart';
 import 'package:flutter_praktek_ujikom/login.dart';
 import 'package:flutter_praktek_ujikom/main.dart';
+import 'package:flutter_praktek_ujikom/model/myEncrypter.dart';
 import 'package:flutter_praktek_ujikom/model/sql_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,7 +20,8 @@ class Register extends StatelessWidget {
   }
 
   Future<void> addItem() async {
-    await SQLHelper.createItem(usernameController.text, passwordController.text,
+    var plainText = MyEncryptionDecryption.encryptAES(passwordController.text);
+    await SQLHelper.createItem(usernameController.text, plainText.base64,
         namaController.text, nomorController.text);
   }
 
@@ -98,7 +100,7 @@ class Register extends StatelessWidget {
                     // setSharedPreferences();
                     addItem();
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Successfully deleted a journal!'),
+                      content: Text('!'),
                     ));
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => LoginPage()));

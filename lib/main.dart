@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_praktek_ujikom/dashboard.dart';
+import 'package:flutter_praktek_ujikom/model/myEncrypter.dart';
 import 'package:flutter_praktek_ujikom/model/sql_helper.dart';
 import 'package:flutter_praktek_ujikom/register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -125,8 +126,10 @@ class _LoginPage extends State<LoginPage> {
                     print(lenght);
                     for (i = 0; i < lenght; i++) {
                       print('${_dataUser[i]['username']}');
+                      var plainText = MyEncryptionDecryption.encryptAES(
+                          passwordController.text);
                       if (_dataUser[i]['username'] == usernameController.text &&
-                          _dataUser[i]['password'] == passwordController.text) {
+                          _dataUser[i]['password'] == plainText.base64) {
                         setSharedPreferences(
                             _dataUser[i]['id'].toString(),
                             _dataUser[i]['username'],
